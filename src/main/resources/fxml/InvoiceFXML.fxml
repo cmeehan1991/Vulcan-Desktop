@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToolbar?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="575.0" prefWidth="823.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cbmwebdevelopment.invoices.InvoiceFXMLController">
+   <children>
+      <JFXToolbar prefHeight="29.0" prefWidth="425.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <left>
+            <HBox prefHeight="29.0" prefWidth="201.0" BorderPane.alignment="CENTER">
+               <children>
+                  <JFXButton onAction="#newInvoiceAction" text="New">
+                     <graphic>
+                        <FontAwesomeIcon iconName="FILE_TEXT_ALT" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton onAction="#saveInvoiceAction" text="Save">
+                     <graphic>
+                        <FontAwesomeIcon iconName="SAVE" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton onAction="#deleteInvoiceAction" text="Delete" textFill="RED">
+                     <graphic>
+                        <FontAwesomeIcon fill="RED" iconName="REMOVE" />
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </HBox>
+         </left>
+         <center>
+            <HBox prefHeight="29.0" prefWidth="202.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <JFXButton onAction="#exportInvoiceAction" text="Download">
+                     <graphic>
+                        <FontAwesomeIcon iconName="DOWNLOAD" />
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </HBox>
+         </center>
+         <right>
+            <HBox prefHeight="29.0" prefWidth="518.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <JFXButton onAction="#receivePaymentAction" text="Receive Payment">
+                     <graphic>
+                        <FontAwesomeIcon iconName="CREDIT_CARD" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton onAction="#issueRefundAction" text="Issue Refund">
+                     <graphic>
+                        <FontAwesomeIcon iconName="UNDO" />
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </HBox>
+         </right>
+      </JFXToolbar>
+      <JFXComboBox fx:id="customerComboBox" labelFloat="true" layoutX="14.0" layoutY="40.0" prefHeight="27.0" prefWidth="288.0" promptText="Customer" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="40.0" />
+      <JFXTextArea fx:id="shippingAddressTextArea" labelFloat="true" layoutX="658.0" layoutY="87.0" prefHeight="106.0" prefWidth="151.0" promptText="Shipping Address" wrapText="true" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="87.0" />
+      <JFXDatePicker fx:id="invoiceDatePicker" layoutX="318.0" layoutY="39.0" prefHeight="27.0" prefWidth="189.0" promptText="Invoice Date" AnchorPane.leftAnchor="318.0" AnchorPane.topAnchor="39.0" />
+      <JFXTextField fx:id="subtotalTextField" editable="false" labelFloat="true" layoutX="493.0" layoutY="422.0" promptText="Subtotal" AnchorPane.rightAnchor="179.0" AnchorPane.topAnchor="422.0" />
+      <JFXTextField fx:id="totalTextField" labelFloat="true" layoutX="658.0" layoutY="466.0" promptText="Total" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="466.0">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="invoiceIdTextField" labelFloat="true" layoutX="658.0" layoutY="40.0" promptText="Invoice #" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="40.0" />
+      <JFXTextArea fx:id="billingAddressTextArea" labelFloat="true" layoutX="493.0" layoutY="87.0" prefHeight="106.0" prefWidth="151.0" promptText="Billing Address" wrapText="true" AnchorPane.rightAnchor="179.0" AnchorPane.topAnchor="87.0" />
+      <JFXComboBox fx:id="taxComboBox" labelFloat="true" layoutX="658.0" layoutY="422.0" prefHeight="27.0" prefWidth="151.0" promptText="Tax" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="422.0" />
+      <JFXTextField fx:id="paymentsAppliedTextFieldpaymentsAppliedTextField" layoutX="658.0" layoutY="507.0" promptText="Payments Applied" AnchorPane.rightAnchor="14.0">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="balanceDueTextField" layoutX="658.0" layoutY="548.0" promptText="Balance Due" AnchorPane.rightAnchor="14.0">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextArea fx:id="memoTextArea" labelFloat="true" layoutX="14.0" layoutY="430.0" prefHeight="72.0" prefWidth="421.0" promptText="Memo" wrapText="true" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="430.0" />
+      <TableView fx:id="invoiceItemsTableView" layoutX="369.0" layoutY="200.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="200.0" />
+      <JFXButton buttonType="RAISED" layoutX="493.0" layoutY="466.0" onAction="#calculateTotalAction" prefHeight="27.0" prefWidth="151.0" text="Calculate Total" AnchorPane.leftAnchor="493.0" AnchorPane.topAnchor="466.0" />
+   </children>
+</AnchorPane>

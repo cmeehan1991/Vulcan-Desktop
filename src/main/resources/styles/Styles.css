@@ -1,0 +1,133 @@
+.mainPane{
+    -fx-background-color: #004d00;
+}
+
+
+/* Labels */
+Label.light{
+    -fx-text-fill: #ffffff;
+}
+.label--error{
+    -fx-text-fill: #ff0000;
+}
+
+/* Buttons */
+.submit-button{}
+
+.submit-button--light-border{
+    -fx-border-color: #ffffff;
+    -fx-text-fill: #ffffff;
+}
+
+/* Progress Indicator */
+.progress-indicator--light{
+    -fx-progress-color: #ffffff;
+}
+
+.progress-indicator--dark{
+    -fx-progress-color:#4e4e4e;
+}
+
+ProgressIndicator{
+    max-height: 50px;
+    max-width:50px;
+}
+
+.dialog--loading-dialog{
+    -fx-background-color:rgba(0,0,0,0.5);
+}
+
+.dialog--loading-dialog__label{
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff;
+}
+
+.missing{
+    -jfx-unfocus-color:#ff0000;
+}
+
+/* Navigation Pane */
+.navigation-pane{
+    -fx-background-color:#004d00;
+}
+
+.navigation-pane--button{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+}
+
+.navigation-pane--button FontAwesomeIcon{
+    -fx-fill: #ffffff;
+}
+
+.navigation-pane--child{
+    -fx-background-color: #d5d4d4;
+}
+
+/* Dashboard */
+
+.dashboard-section .title{
+    -fx-background-color: #ffffff;
+    -fx-font-family:Arial;
+    -fx-font-size:14px;
+}
+.dashboard-section{
+    -fx-font-family: Arial;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ffffff;
+    width:250px;
+    height:250px;
+}
+
+.dashboard-section *.content{
+    -fx-border-color:#ffffff;
+}
+.progress-bar--income .bar{ 
+    -fx-background-color: #00b300;
+}
+
+.progress-bar--expenses .bar{
+    -fx-background-color:red;
+}
+
+.dashboard-section--filter{
+    -fx-background-color: transparent;
+}
+
+#AnchorPane{
+    -fx-background-color:#ffffff;
+}
+
+.section--header{
+    -fx-background-color:rgba(0,0,0,0.05);
+}
+
+.section-heading{
+    -fx-font-size:18px;
+    -fx-font-family:"Arial";
+}
+
+/* Payments */
+.outstanding-transactions-table .column-header, .transactions-table .column-header{
+    -fx-background-color:rgba(0,0,0,0.05);
+    
+}
+
+.outstanding-transactions-table .column-header .label, .transactions-table .column-header .label{ 
+    -fx-text-fill:rgba(0,0,0,1.0);
+    -fx-font-family: "Arial";
+    -fx-font-weight: lighter;
+    -fx-font-size: 14px;
+}
+
+/* ToolBar */
+.primaryToolBar{
+    -fx-background-color:rgba(0,0,0,0.05);
+}
+
+.primaryToolBar JFXButton{
+    -fx-font-family:"Arial";
+    -fx-font-size:12px;
+}
+

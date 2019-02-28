@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="559.0" prefWidth="877.0" styleClass="mainFxmlClass" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cbmwebdevelopment.accounting.TransactionsController">
+   <children>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" styleClass="primaryToolBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <JFXButton onAction="#receivePaymentAction" text="Receive Payment" />
+            <JFXButton onAction="#payBillAction" text="Pay Bill" />
+         </items>
+      </ToolBar>
+      <TableView fx:id="transactionsTableView" layoutX="14.0" layoutY="82.0" prefHeight="413.0" prefWidth="822.0" styleClass="transactions-table" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="85.0">
+        <columns>
+          <TableColumn maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="125.0" text="ID" />
+            <TableColumn maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="360.0" text="DESCRIPTION" />
+            <TableColumn maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="120.0" text="TYPE" />
+            <TableColumn maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="120.0" text="DATE" />
+            <TableColumn maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="120.0" text="AMOUNT" />
+        </columns>
+      </TableView>
+      <JFXComboBox fx:id="filterByComboBox" layoutX="57.0" layoutY="51.0" prefHeight="27.0" prefWidth="177.0" promptText="Filter By" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="50.0" />
+      <JFXTextField fx:id="searchTransactionsTextField" layoutX="203.0" layoutY="50.0" prefHeight="27.0" prefWidth="274.0" promptText="Search" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="50.0" />
+      <JFXDatePicker fx:id="toDatePicker" layoutX="673.0" layoutY="49.0" promptText="To" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="50.0" />
+      <JFXDatePicker fx:id="fromDatePicker" layoutX="484.0" layoutY="50.0" promptText="From" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="50.0" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="660.0" prefWidth="1033.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cbmwebdevelopment.main.MainFXMLController">
+   <center>
+      <StackPane fx:id="parentPane">
+         <children>
+            <AnchorPane fx:id="mainPane" prefHeight="660.0" prefWidth="743.0" />
+         </children>
+      </StackPane>
+   </center>
+   <top>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <left>
+      <VBox fx:id="navigationBox" prefHeight="632.0" prefWidth="156.0" styleClass="navigation-pane" BorderPane.alignment="CENTER">
+         <children>
+            <JFXButton alignment="TOP_LEFT" onAction="#dashboardNavigationAction" prefHeight="32.0" prefWidth="156.0" styleClass="navigation-pane--button" text="Dashboard">
+               <graphic>
+                  <FontAwesomeIcon iconName="DASHBOARD" />
+               </graphic>
+            </JFXButton>
+            <JFXButton alignment="TOP_LEFT" onAction="#clientsNavigationAction" prefHeight="32.0" prefWidth="156.0" styleClass="navigation-pane--button" text="Clients">
+               <graphic>
+                  <FontAwesomeIcon iconName="USERS" />
+               </graphic>
+            </JFXButton>
+            <VBox fx:id="clientsSubNavigation" maxHeight="0.0" minHeight="0.0" prefHeight="0.0" prefWidth="100.0" styleClass="navigation-pane--child" visible="false">
+               <children>
+                  <JFXButton alignment="TOP_LEFT" onAction="#newClientAction" prefHeight="32.0" prefWidth="156.0" styleClass="navigation-pane--child-button" text="New Client">
+                     <graphic>
+                        <FontAwesomeIcon iconName="USER_PLUS" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton alignment="TOP_LEFT" onAction="#viewClientAction" prefHeight="32.0" prefWidth="156.0" styleClass="navigation-pane--child-button" text="View/Edit Client">
+                     <graphic>
+                        <FontAwesomeIcon iconName="USER" text="" />
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+            <JFXButton alignment="TOP_LEFT" onAction="#invoicesNavigationAction" prefHeight="32.0" prefWidth="156.0" styleClass="navigation-pane--button" text="Invoices">
+               <graphic>
+                  <FontAwesomeIcon iconName="LIST_ALT" />
+               </graphic>
+            </JFXButton>
+            <VBox fx:id="invoicesSubNavigation" maxHeight="0.0" minHeight="0.0" prefHeight="0.0" prefWidth="100.0" styleClass="navigation-pane--child" visible="false">
+               <children>
+                  <JFXButton alignment="TOP_LEFT" onAction="#newInvoiceAction" prefHeight="32.0" prefWidth="156.0" text="New Invoice">
+                     <styleClass>
+                        <String fx:value="navigation-pane--child-button" />
+                        <String fx:value="active" />
+                     </styleClass>
+                  </JFXButton>
+                  <JFXButton alignment="TOP_LEFT" onAction="#viewInvoiceAction" prefHeight="32.0" prefWidth="156.0" styleClass="navigation-pane--child-button" text="View/Edit Invoice" />
+               </children>
+            </VBox>
+            <JFXButton alignment="TOP_LEFT" onAction="#quotesNavigationAction" prefHeight="32.0" prefWidth="158.0" styleClass="navigation-pane--button" text="Quotes">
+               <graphic>
+                  <FontAwesomeIcon iconName="LIST" />
+               </graphic>
+            </JFXButton>
+            <VBox fx:id="quotesSubNavigation" maxHeight="0.0" minHeight="0.0" prefHeight="0.0" prefWidth="100.0" styleClass="navigation-pane--child" visible="false">
+               <children>
+                  <JFXButton alignment="TOP_LEFT" onAction="#newQuoteAction" prefHeight="32.0" prefWidth="156.0" styleClass="navigation-pane--child-button" text="New Quote" />
+                  <JFXButton alignment="TOP_LEFT" onAction="#viewQuoteAction" prefHeight="32.0" prefWidth="156.0" styleClass="navigation-pane--child-button" text="View/Edit Quote" />
+               </children>
+            </VBox>
+            <JFXButton alignment="TOP_LEFT" onAction="#accountingNavigationAction" prefHeight="32.0" prefWidth="158.0" styleClass="navigation-pane--button" text="Accounting">
+               <graphic>
+                  <FontAwesomeIcon iconName="LIST" />
+               </graphic>
+            </JFXButton>
+            <VBox fx:id="accountingSubNavigation" maxHeight="0.0" minHeight="0.0" prefHeight="0.0" prefWidth="100.0" styleClass="navigation-pane--child" visible="false">
+               <children>
+                  <JFXButton alignment="TOP_LEFT" onAction="#transactionsDashboardAction" prefHeight="32.0" prefWidth="156.0" styleClass="navigation-pane--child-button" text="Transactions" />
+                  <JFXButton alignment="TOP_LEFT" onAction="#receivePaymentAction" prefHeight="32.0" prefWidth="156.0" styleClass="navigation-pane--child-button" text="Receive Payment" />
+               </children>
+            </VBox>
+         </children></VBox>
+   </left>
+</BorderPane>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXProgressBar?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="618.0" prefWidth="879.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cbmwebdevelopment.dashboard.DashboardFXMLController">
+    <stylesheets>
+        <URL value="@/styles/Styles.css" />
+    </stylesheets>
+   <children>
+      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" hgap="20.0" maxHeight="618.0" minHeight="-Infinity" prefHeight="500.0" prefWidth="879.0" stylesheets="@../styles/Styles.css" vgap="25.0">
+         <children>
+            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0" spacing="50.0" styleClass="dashboard-section">
+               <children>
+                  <VBox>
+                     <children>
+                        <Label alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="18.0" prefWidth="253.0" text="Profit and Loss">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="netProfitLossLabel" prefHeight="21.0" prefWidth="247.0" text="\$400">
+                           <font>
+                              <Font name="Arial Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="18.0" prefWidth="253.0" text="NET PROFIT FOR THIS YEAR" textFill="GREY">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <Pane prefHeight="59.0" prefWidth="250.0">
+                     <children>
+                        <HBox>
+                           <children>
+                              <JFXProgressBar fx:id="incomeProgressBar" prefHeight="25.0" prefWidth="192.0" progress="0.9" styleClass="progress-bar--income" />
+                              <VBox>
+                                 <children>
+                                    <Label fx:id="incomeAmountLabel" text="\$450">
+                                       <font>
+                                          <Font name="Arial Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="INCOME">
+                                       <font>
+                                          <Font name="Arial" size="10.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox layoutX="2.0" layoutY="32.0">
+                           <children>
+                              <JFXProgressBar fx:id="expensesProgressBar" prefHeight="25.0" prefWidth="192.0" progress="0.1" style="-fx-background-color: red;" styleClass="progress-bar--expenses" />
+                              <VBox>
+                                 <children>
+                                    <Label fx:id="lossAmountLabel" text="\$50">
+                                       <font>
+                                          <Font name="Arial Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="EXPENSES">
+                                       <font>
+                                          <Font name="Arial" size="10.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+               </children>
+            </VBox>
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0">
+               <children>
+                  <VBox>
+                     <children>
+                        <Label fx:id="totalExpensesLabel" alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="18.0" prefWidth="253.0" text="Expenses">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="totalExpensesLabel" prefHeight="21.0" prefWidth="247.0" text="\$50">
+                           <font>
+                              <Font name="Arial Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="18.0" prefWidth="253.0" text="TOTAL EXPENSES" textFill="GREY">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <PieChart fx:id="expensesPieChart" prefHeight="250.0" prefWidth="250.0" styleClass="dashboard-section" />
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0" spacing="50.0" styleClass="dashboard-section">
+               <children>
+                  <VBox>
+                     <children>
+                        <HBox>
+                           <children>
+                              <Label alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="18.0" prefWidth="253.0" text="Invoices">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="invoicesFilterComboBox" prefHeight="27.0" prefWidth="327.0" styleClass="dashboard-section--filter" />
+                           </children>
+                        </HBox>
+                        <Label fx:id="totalInvoicesAmountLabel" prefHeight="21.0" prefWidth="247.0" text="\$400">
+                           <font>
+                              <Font name="Arial Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <HBox>
+                           <children>
+                              <Label fx:id="invoicesAmountUnpaidLabel" alignment="TOP_LEFT" contentDisplay="TOP" ellipsisString="" minWidth="-Infinity" prefHeight="18.0" text="\$0" textFill="GREY">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="18.0" text=" UNPAID LAST " textFill="GREY">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="18.0" prefWidth="101.0" text="30 DAYS" textFill="GREY">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Pane prefHeight="59.0" prefWidth="250.0">
+                     <children>
+                        <HBox>
+                           <children>
+                              <JFXProgressBar fx:id="paidInvoicesProgressBar" prefHeight="25.0" prefWidth="192.0" progress="0.9" styleClass="progress-bar--income" />
+                              <VBox>
+                                 <children>
+                                    <Label fx:id="invoicesAmountPaidBarLabel" text="\$450">
+                                       <font>
+                                          <Font name="Arial Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="PAID">
+                                       <font>
+                                          <Font name="Arial" size="10.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox layoutX="2.0" layoutY="32.0">
+                           <children>
+                              <JFXProgressBar fx:id="unpaidInvoicesProgressBar" prefHeight="25.0" prefWidth="192.0" progress="0.1" style="-fx-background-color: red;" styleClass="progress-bar--expenses" />
+                              <VBox>
+                                 <children>
+                                    <Label fx:id="invoicesAmountUnpaidBarLabel" text="\$50">
+                                       <font>
+                                          <Font name="Arial Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="NOT PAID">
+                                       <font>
+                                          <Font name="Arial" size="10.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+         </padding>
+      </FlowPane>
+   </children>
+</AnchorPane>

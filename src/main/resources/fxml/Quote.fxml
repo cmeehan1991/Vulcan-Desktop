@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="571.0" prefWidth="908.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cbmwebdevelopment.quote.QuoteController">
+   <children>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" styleClass="primaryToolBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <JFXButton fx:id="saveQuoteButton" buttonType="RAISED" onAction="#saveQuoteAction" text="SAVE">
+               <graphic>
+                  <FontAwesomeIcon iconName="SAVE" />
+               </graphic>
+            </JFXButton>
+            <Separator orientation="VERTICAL" />
+            <JFXButton fx:id="printQuoteButton" buttonType="RAISED" onAction="#printQuoteAction" text="PRINT">
+               <graphic>
+                  <FontAwesomeIcon iconName="PRINT" />
+               </graphic>
+            </JFXButton>
+            <JFXButton fx:id="downloadQuoteButton" buttonType="RAISED" onAction="#downloadQuoteAction" ripplerFill="#4e4e4e" text="DOWNLOAD">
+               <graphic>
+                  <FontAwesomeIcon iconName="DOWNLOAD" />
+               </graphic>
+            </JFXButton>
+            <Separator orientation="VERTICAL" />
+            <JFXButton fx:id="sendToInvoiceButton" buttonType="RAISED" onAction="#sendToInvoiceAction" text="SEND TO INVOICE">
+               <graphic>
+                  <FontAwesomeIcon iconName="EXTERNAL_LINK" />
+               </graphic>
+            </JFXButton>
+         </items>
+      </ToolBar>
+      <JFXComboBox fx:id="customerComboBox" editable="true" labelFloat="true" layoutX="14.0" layoutY="50.0" prefHeight="27.0" prefWidth="257.0" promptText="Customer" AnchorPane.topAnchor="50.0" />
+      <JFXDatePicker fx:id="quoteDateDatePicker" editable="false" layoutX="280.0" layoutY="47.0" prefHeight="17.0" prefWidth="191.0" promptText="Quote Date" AnchorPane.topAnchor="47.0" />
+      <JFXTextArea fx:id="billingAddressTextArea" labelFloat="true" layoutX="15.0" layoutY="107.0" prefHeight="106.0" prefWidth="316.0" promptText="Address" />
+      <TableView fx:id="quoteItemTableView" layoutX="15.0" layoutY="229.0" prefHeight="328.0" prefWidth="564.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="229.0" />
+      <JFXTextField fx:id="quoteIdTextField" layoutX="534.0" layoutY="52.0" promptText="Quote ID" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="50.0" />
+   </children>
+</AnchorPane>
