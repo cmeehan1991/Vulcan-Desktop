@@ -34,14 +34,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Properties;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 /**
  *
@@ -101,8 +95,6 @@ public class InvoicePDF {
             document.add(headerText().setMarginTop(20));
             document.add(billTo());
             document.add(quoteData());
-            
-            System.out.println(INVOICE_DATA.getMemo());
             
             String memo = INVOICE_DATA.getMemo() == null ? "" : INVOICE_DATA.getMemo();
             
@@ -173,13 +165,13 @@ public class InvoicePDF {
         cell = new Cell().add("Date");
         dateTable.addCell(cell);
 
-        cell = new Cell().add("Estimate No.");
+        cell = new Cell().add("Invoice No.");
         dateTable.addCell(cell);
 
         cell = new Cell().add(INVOICE_DATA.getInvoiceDate());
         dateTable.addCell(cell);
 
-        cell = new Cell().add(INVOICE_DATA.getId());
+        cell = new Cell().add(String.valueOf(INVOICE_DATA.getId()));
         dateTable.addCell(cell);
 
         cell = new Cell().add(dateTable).setBorder(Border.NO_BORDER);
@@ -224,12 +216,12 @@ public class InvoicePDF {
                 cell = new Cell().add(price).setBorderTop(Border.NO_BORDER).setBorderBottom(Border.NO_BORDER);
                 table.addCell(cell);
 
-                String total = CURRENCY.format(Double.parseDouble(item.getTotal()));
+                String total = item.getTotal();
                 cell = new Cell().add(total).setBorderTop(Border.NO_BORDER).setBorderBottom(Border.NO_BORDER);
                 table.addCell(cell);
 
-                try {
-                    itemsTotal += NumberFormat.getInstance().parse(item.getTotal()).doubleValue();
+                try {                    
+                    itemsTotal += NumberFormat.getCurrencyInstance().parse(item.getTotal()).doubleValue();
                 } catch (ParseException ex) {
                     System.err.println(ex.getMessage());
                 }

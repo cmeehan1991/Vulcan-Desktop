@@ -5,93 +5,108 @@
  */
 package com.cbmwebdevelopment.invoices;
 
+import com.cbmwebdevelopment.connections.DBConnection;
 import com.cbmwebdevelopment.invoices.InvoiceTableController.InvoiceItems;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.util.stream.Collectors;
+import com.cbmwebdevelopment.notifications.Notifications;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  *
  * @author cmeehan
  */
 public class Invoice {
-    private final String URL_STRING = "http://www.meehanwoodworking.com/vulcan/classes/Invoice.php";
-    
-    
-    public String saveInvoice(InvoiceData invoiceData) {
-        try{
-            URL url = new URL(URL_STRING);
-            URLConnection conn = url.openConnection();
-            
-            String data = URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("save_invoice", "UTF-8");
-            data += "&" + URLEncoder.encode("ID", "UTF-8") + "=" + URLEncoder.encode(invoiceData.getId(), "UTF-8");
-            data += "&" + URLEncoder.encode("CUSTOMER_ID", "UTF-8") + "=" + URLEncoder.encode(invoiceData.getCustomerId(), "UTF-8");
-            data += "&" + URLEncoder.encode("INVOICE_DATE", "UTF-8") + "=" + URLEncoder.encode(invoiceData.getInvoiceDate(), "UTF-8");
-            data += "&" + URLEncoder.encode("STATUS", "UTF-8") + "=" + URLEncoder.encode("N/A", "UTF-8");
-            data += "&" + URLEncoder.encode("BILLING_ADDRESS", "UTF-8") + "=" + URLEncoder.encode(invoiceData.getBillingAddress(), "UTF-8");
-            data += "&" + URLEncoder.encode("MEMO", "UTF-8") + "=" + URLEncoder.encode(invoiceData.getShippingAddress(), "UTF-8");
-            data += "&" + URLEncoder.encode("TAX", "UTF-8") + "=" + URLEncoder.encode(invoiceData.getMemo(), "UTF-8");
-            
-            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-            writer.write(data);
-            writer.flush();
-            
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            JSONObject jsonObject = new JSONObject(reader.lines().collect(Collectors.joining()));
-            
-            return jsonObject.getString("key");
-            
-        }catch(IOException ex){
+
+    public Integer saveInvoice(InvoiceData invoiceData) {
+        Integer invoiceId = invoiceData.getId();
+        String sql = "INSERT INTO INVOICES(INVOICE_ID, CUSTOMER_ID, INVOICE_DATE, STATUS, BILLING_ADDRESS, SHIPPING_ADDRESS, MEMO, TAX) VALUES(?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE CUSTOMER_ID =?, INVOICE_DATE =?, STATUS =?, BILLING_ADDRESS =?, SHIPPING_ADDRESS =?, MEMO =?, TAX =?";
+        try {
+            Connection conn = new DBConnection().connect();
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, invoiceData.getId());
+            ps.setString(2, invoiceData.getCustomerId());
+            ps.setString(3, invoiceData.getInvoiceDate());
+            ps.setInt(4, 0);
+            ps.setString(5, invoiceData.getBillingAddress());
+            ps.setString(6, invoiceData.getShippingAddress());
+            ps.setString(7, invoiceData.getMemo());
+            ps.setString(8, invoiceData.getTaxRate());
+            ps.setString(9, invoiceData.getCustomerId());
+            ps.setString(10, invoiceData.getInvoiceDate());
+            ps.setInt(11, 0);
+            ps.setString(12, invoiceData.getBillingAddress());
+            ps.setString(13, invoiceData.getShippingAddress());
+            ps.setString(14, invoiceData.getMemo());
+            ps.setString(15, invoiceData.getTaxRate());
+
+            int success = ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (success >= 1 && rs.next()) {
+                invoiceId = invoiceId == 0 ? rs.getInt(1) : invoiceId;
+                updateInvoiceItems(invoiceId, invoiceData.getInvoiceItems());
+            }
+            conn.close();
+        } catch (SQLException ex) {
+            Notifications.snackbarNotification("Failed to save invoice");
             System.err.println(ex.getMessage());
-            return null;
         }
-        
+        return invoiceId;
     }
 
-    protected void updateInvoiceItems(String invoiceId, ObservableList<InvoiceItems> items) {
+    public void removeInvoiceItem(String invoiceId, String itemId){
+        String sql = "DELETE FROM invoice_items WHERE invoice_id = ? and id = ?";
         try{
-            URL url = new URL(URL_STRING);
-            URLConnection conn = url.openConnection();
-            conn.setDoOutput(true);
+            Connection conn = new DBConnection().connect();
             
-            JSONArray jsonArray = new JSONArray();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, invoiceId);
+            ps.setString(2, itemId);
+            ps.executeUpdate();
+            
+            conn.close();
+        }catch(SQLException ex){
+            System.err.println(ex.getMessage());
+            Notifications.snackbarNotification("Error deleting record. Please try again.");
+        }
+    }
+    
+    protected void updateInvoiceItems(Integer invoiceId, ObservableList<InvoiceItems> items) {
+        String sql = "INSERT INTO INVOICE_ITEMS(ID, INVOICE_ID, ITEM, DESCRIPTION, QUANTITY, UNIT_PRICE) VALUES(?,?,?,?,?,?) ON DUPLICATE KEY UPDATE ITEM = ?, DESCRIPTION = ?, QUANTITY = ?, UNIT_PRICE = ?";
+        try {
+            Connection conn = new DBConnection().connect();
+            PreparedStatement ps = conn.prepareStatement(sql);
             items.forEach(item -> {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("invoice_id", invoiceId);
-                jsonObject.put("item_id", item.getId());
-                jsonObject.put("item", item.getItem());
-                jsonObject.put("description", item.getDescription());
-                jsonObject.put("quantity", item.getQuantity());
-                jsonObject.put("price", item.getPrice());
-                
-                jsonArray.put(jsonObject);
+                try {
+                    ps.setInt(1, item.getId());
+                    ps.setInt(2, invoiceId);
+                    ps.setString(3, item.getItem());
+                    ps.setString(4, item.getDescription());
+                    ps.setDouble(5, item.getQuantity());
+                    ps.setString(6, item.getPrice());
+                    ps.setString(7, item.getItem());
+                    ps.setString(8, item.getDescription());
+                    ps.setDouble(9, item.getQuantity());
+                    ps.setString(10, item.getPrice());
+                    ps.addBatch();
+                } catch (SQLException ex) {
+                    System.err.println(ex.getMessage());
+                }
+
             });
-            
-            String data = URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("update_invoice_items", "UTF-8");
-            data += "&" + URLEncoder.encode("items", "UTF-8") + "=" + URLEncoder.encode(jsonArray.toString(), "UTF-8");
-            
-            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-            writer.write(data);
-            writer.flush();
-            
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            
-            JSONArray jsonArr = new JSONArray(reader.lines().collect(Collectors.joining()));
-            
-        }catch(IOException ex){
+            ps.executeBatch();
+            conn.commit();
+            conn.close();
+        } catch (SQLException ex) {
+            Notifications.snackbarNotification("Error updating invoice items.");
             System.err.println(ex.getMessage());
         }
-        
-        
+
     }
 
     /**
@@ -101,64 +116,50 @@ public class Invoice {
      * @return
      */
     protected InvoiceData getInvoice(String invoiceId) {
-        
+
         InvoiceData invoiceData = new InvoiceData();
-        try{
-            URL url = new URL(URL_STRING);
-            URLConnection conn = url.openConnection();
-            conn.setDoOutput(true);
-            
-            String data = URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("get_invoice", "UTF-8");
-            data += "&" + URLEncoder.encode("invoice_id", "UTF-8") + "=" + URLEncoder.encode(invoiceId, "UTF-8");
-            
-            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-            wr.write(data);
-            wr.flush();
-            
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            JSONObject jsonObj = new JSONObject(reader.lines().collect(Collectors.joining()));
-            invoiceData.setId(jsonObj.getString("INVOICE_ID"));
-            invoiceData.setCustomerId(jsonObj.getString("CUSTOMER_ID"));
-            invoiceData.setInvoiceDate(jsonObj.getString("INVOICE_DATE"));
-            invoiceData.setStatus(jsonObj.getString("STATUS"));
-            invoiceData.setBillingAddress(jsonObj.getString("BILLING_ADDRESS"));
-            invoiceData.setShippingAddress(jsonObj.getString("SHIPPING_ADDRESS"));
-            invoiceData.setMemo(jsonObj.getString("MEMO"));
-            invoiceData.setTaxRate(jsonObj.getString("TAX"));
-            invoiceData.setInvoiceItems(getInvoiceItems(invoiceId));
-            
-            wr.close();
-            reader.close();
-        }catch(IOException ex){
+        String sql = "SELECT INVOICE_ID, CUSTOMER_ID, DATE_FORMAT(INVOICE_DATE, '%Y-%m-%d') as 'INVOICE_DATE', STATUS, BILLING_ADDRESS, SHIPPING_ADDRESS, MEMO, TAX FROM INVOICES WHERE INVOICE_ID = ?";
+        try {
+            Connection conn = new DBConnection().connect();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, invoiceId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                invoiceData.setId(rs.getInt("INVOICE_ID"));
+                invoiceData.setCustomerId(rs.getString("CUSTOMER_ID"));
+                invoiceData.setInvoiceDate(rs.getString("INVOICE_DATE"));
+                invoiceData.setStatus(rs.getString("STATUS"));
+                invoiceData.setBillingAddress(rs.getString("BILLING_ADDRESS"));
+                invoiceData.setShippingAddress(rs.getString("SHIPPING_ADDRESS"));
+                invoiceData.setMemo(rs.getString("MEMO"));
+                invoiceData.setTaxRate(rs.getString("TAX"));
+                invoiceData.setInvoiceItems(getInvoiceItems(invoiceId));
+            }
+
+            conn.close();
+        } catch (SQLException ex) {
             System.err.println(ex.getMessage());
+            Notifications.snackbarNotification("Error retrieving invoice");
         }
         return invoiceData;
     }
 
     private ObservableList<InvoiceItems> getInvoiceItems(String invoiceId) {
         ObservableList<InvoiceItems> items = FXCollections.observableArrayList();
-        try{
-            URL url = new URL(URL_STRING);
-            URLConnection conn = url.openConnection();
-            conn.setDoOutput(true);
-            
-            String data = URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("get_invoice_items", "UTF-8");
-            data += "&" + URLEncoder.encode("invoice_id", "UTF-8") + "=" + URLEncoder.encode(invoiceId, "UTF-8");
-            
-            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-            wr.write(data);
-            wr.flush();
-            
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            JSONArray jsonArr = new JSONArray(reader.lines().collect(Collectors.joining()));
-            for(int i = 0; i < jsonArr.length(); i++){
-                JSONObject jsonObj = jsonArr.getJSONObject(i);
-                
-                items.add(new InvoiceItems(jsonObj.getInt("ID"), jsonObj.getString("ITEM"), jsonObj.getString("DESCRIPTION"), jsonObj.getDouble("QUANTITY"), jsonObj.getString("UNIT_PRICE"), jsonObj.getString("TOTAL")));
-               
+        String sql = "SELECT ID, INVOICE_ID, ITEM, DESCRIPTION, QUANTITY, UNIT_PRICE, QUANTITY * UNIT_PRICE AS 'TOTAL' FROM INVOICE_ITEMS WHERE INVOICE_ID = ?";
+        try {
+            Connection conn = new DBConnection().connect();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, invoiceId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                do {
+                    items.add(new InvoiceItems(rs.getInt("ID"), rs.getString("ITEM"), rs.getString("DESCRIPTION"), rs.getDouble("QUANTITY"), rs.getString("UNIT_PRICE"), rs.getString("TOTAL")));
+                } while (rs.next());
             }
-        }catch(IOException ex){
+        } catch (SQLException ex) {
             System.err.println(ex.getMessage());
+            Notifications.snackbarNotification("Error retrieving invoice items.");
         }
         return items;
     }

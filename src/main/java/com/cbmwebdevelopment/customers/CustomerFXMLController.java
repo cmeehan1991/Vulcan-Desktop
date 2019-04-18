@@ -6,13 +6,10 @@
 package com.cbmwebdevelopment.customers;
 
 import com.cbmwebdevelopment.customers.CustomerInvoicesTableController.CustomerInvoices;
-import com.cbmwebdevelopment.main.MainApp;
 import com.cbmwebdevelopment.notifications.Notifications;
 import com.cbmwebdevelopment.values.Values;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
-import com.jfoenix.controls.JFXSnackbar;
-import com.jfoenix.controls.JFXSnackbar.SnackbarEvent;
 import com.jfoenix.controls.JFXTextField;
 import com.sibvisions.rad.ui.javafx.ext.FXSelectableLabel;
 import java.net.URL;
@@ -22,8 +19,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
@@ -33,7 +28,6 @@ import javafx.scene.Node;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 

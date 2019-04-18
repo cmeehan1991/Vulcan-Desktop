@@ -5,14 +5,11 @@
  */
 package com.cbmwebdevelopment.user;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import org.json.JSONObject;
+import com.cbmwebdevelopment.connections.DBConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -20,49 +17,32 @@ import org.json.JSONObject;
  */
 public class User {
 
-    private final String URL_STRING = "http://www.meehanwoodworking.com/vulcan/classes/Users.php";
-    private final String ENC = "UTF-8";
-
+    /**
+     * Log the user in if the user exists.
+     * 
+     * @param username
+     * @param password
+     * @return 
+     */
     public boolean signIn(String username, String password) {
+        String sql = "SELECT ID FROM USERS WHERE (USERNAME = ? OR EMAIL = ?) AND PASSWORD = MD5(?)";
         try {
-            // Create the URL connection
-            URL url = new URL(URL_STRING);
-            URLConnection conn = url.openConnection();
-            conn.setDoOutput(true);
-            
-            // Set the data
-            String data = URLEncoder.encode("action", ENC) + "=" + URLEncoder.encode("sign_in", ENC);
-            data += "&" + URLEncoder.encode("username", ENC) + "=" + URLEncoder.encode(username, ENC);
-            data += "&" + URLEncoder.encode("password", ENC) + "=" + URLEncoder.encode(password, ENC);
-            
-            // Write to the stream
-            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-            writer.write(data);
-            writer.flush();
-            
-            // Read the response
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-                break;
-            }
-            // Parse the response
-            JSONObject jsonObject = new JSONObject(line);
-            
-            if (!jsonObject.getBoolean("success")) {
-                return false;
-            }
-            if (!jsonObject.getString("ID").isEmpty() && jsonObject.getBoolean("success")) {
-                System.setProperty("USER_ID", jsonObject.getString("ID"));
-                System.setProperty("LOGGED_IN", "true");
-                return true;
-            }
-            
+            Connection conn = new DBConnection().connect();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.setString(2, username);
+            ps.setString(3, password);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                String id = rs.getString("ID");
+                if(!id.isEmpty()){
+                    System.setProperty("USER_ID", id);
+                    System.setProperty("USER_IS_LOGGED_IN", "true");
+                    return true;
+                }
+            }            
             return false;            
-        } catch (IOException ex) {
+        } catch (SQLException ex) {
             System.err.println(ex.getMessage());
             return false;
         }

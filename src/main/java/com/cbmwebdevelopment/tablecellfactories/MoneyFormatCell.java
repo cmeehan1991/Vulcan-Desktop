@@ -36,7 +36,8 @@ public class MoneyFormatCell<InvoiceItems> extends TableCell<InvoiceItems, Strin
         setText(textField.getText());
         setGraphic(textField);
         textField.selectAll();
-        
+        textField.requestFocus();
+
     }
 
     @Override
@@ -60,16 +61,16 @@ public class MoneyFormatCell<InvoiceItems> extends TableCell<InvoiceItems, Strin
         // Format the number as if it were a monetary value using the 
         // formatting relevant to the current locale. 
         try {
+            if (item != null && item.contains("(")) {
+                item = item.replaceAll("(\\()|(\\))", "");
+                item = "-" + item;
+            }
             String parsedItem = item != null && item.contains("$") ? item.replace("$", "") : item == null ? "0.00" : item;
             Number number = NumberFormat.getNumberInstance().parse(parsedItem);
             setText(item == null ? "" : NumberFormat.getCurrencyInstance().format(number));
 
-            if (item != null) {
-                double value = Double.parseDouble(number.toString());
-                //setTextFill(isSelected() ? Color.WHITE : value == 0 ? Color.BLACK : value < 0 ? Color.RED : Color.GREEN);
-            }
         } catch (ParseException ex) {
-            System.err.println(ex.getMessage());
+            System.err.println("Money Format Cell - Update Item Error: " + ex.getMessage());
         }
     }
 
@@ -85,6 +86,7 @@ public class MoneyFormatCell<InvoiceItems> extends TableCell<InvoiceItems, Strin
             switch (event.getCode()) {
                 case ENTER:
                     commitEdit(textField.getText());
+                    event.consume();
                     break;
                 case TAB:
                     commitEdit(textField.getText());
@@ -94,6 +96,7 @@ public class MoneyFormatCell<InvoiceItems> extends TableCell<InvoiceItems, Strin
                         getTableView().edit(getTableRow().getIndex(), nextColumn);
                         getTableView().getFocusModel().focus(getTableRow().getIndex() + 1);
                         getTableView().requestFocus();
+                        textField.selectAll();
                         textField.requestFocus();
                     }
                     break;

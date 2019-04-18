@@ -8,6 +8,7 @@
 <?import com.jfoenix.controls.JFXToolbar?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -80,7 +81,7 @@
       <JFXTextField fx:id="invoiceIdTextField" labelFloat="true" layoutX="658.0" layoutY="40.0" promptText="Invoice #" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="40.0" />
       <JFXTextArea fx:id="billingAddressTextArea" labelFloat="true" layoutX="493.0" layoutY="87.0" prefHeight="106.0" prefWidth="151.0" promptText="Billing Address" wrapText="true" AnchorPane.rightAnchor="179.0" AnchorPane.topAnchor="87.0" />
       <JFXComboBox fx:id="taxComboBox" labelFloat="true" layoutX="658.0" layoutY="422.0" prefHeight="27.0" prefWidth="151.0" promptText="Tax" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="422.0" />
-      <JFXTextField fx:id="paymentsAppliedTextFieldpaymentsAppliedTextField" layoutX="658.0" layoutY="507.0" promptText="Payments Applied" AnchorPane.rightAnchor="14.0">
+      <JFXTextField fx:id="paymentsAppliedTextField" layoutX="658.0" layoutY="507.0" promptText="Payments Applied" AnchorPane.rightAnchor="14.0">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
@@ -91,7 +92,17 @@
          </font>
       </JFXTextField>
       <JFXTextArea fx:id="memoTextArea" labelFloat="true" layoutX="14.0" layoutY="430.0" prefHeight="72.0" prefWidth="421.0" promptText="Memo" wrapText="true" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="430.0" />
-      <TableView fx:id="invoiceItemsTableView" layoutX="369.0" layoutY="200.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="200.0" />
+      <TableView fx:id="invoiceItemsTableView" layoutX="369.0" layoutY="200.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="200.0">
+         <columns>
+            <TableColumn prefWidth="75.0" visible="false" />
+            <TableColumn prefWidth="150.0" text="Item" />
+            <TableColumn prefWidth="300.0" text="Description" />
+            <TableColumn prefWidth="45.0" text="Qty" />
+            <TableColumn prefWidth="75.0" text="Unit Price" />
+            <TableColumn prefWidth="75.0" text="Total" />
+            <TableColumn prefWidth="75.0" text="Remove" />
+            <TableColumn prefWidth="75.0" text="Add" />
+         </columns></TableView>
       <JFXButton buttonType="RAISED" layoutX="493.0" layoutY="466.0" onAction="#calculateTotalAction" prefHeight="27.0" prefWidth="151.0" text="Calculate Total" AnchorPane.leftAnchor="493.0" AnchorPane.topAnchor="466.0" />
    </children>
 </AnchorPane>

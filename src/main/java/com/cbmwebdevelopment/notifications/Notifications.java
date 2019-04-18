@@ -123,5 +123,13 @@ public class Notifications {
 
         return dialog;
     }
+    
+    public static JFXDialog deleteConfirmationDialog(){
+        JFXDialogLayout content = new JFXDialogLayout(); 
+        
+        JFXDialog dialog = new JFXDialog(MainApp.parentPane, content, JFXDialog.DialogTransition.CENTER);
+        
+        return dialog;
+    }
 
 }

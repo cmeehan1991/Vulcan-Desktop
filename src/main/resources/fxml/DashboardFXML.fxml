@@ -128,25 +128,7 @@
                               <Font name="Arial Bold" size="18.0" />
                            </font>
                         </Label>
-                        <HBox>
-                           <children>
-                              <Label fx:id="invoicesAmountUnpaidLabel" alignment="TOP_LEFT" contentDisplay="TOP" ellipsisString="" minWidth="-Infinity" prefHeight="18.0" text="\$0" textFill="GREY">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                              <Label alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="18.0" text=" UNPAID LAST " textFill="GREY">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                              <Label alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="18.0" prefWidth="101.0" text="30 DAYS" textFill="GREY">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </HBox>
+                        <HBox />
                      </children>
                   </VBox>
                   <Pane prefHeight="59.0" prefWidth="250.0">

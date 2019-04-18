@@ -63,18 +63,60 @@ public class DashboardFXMLController implements Initializable {
     private final ObservableList<String> FILTER_BY = FXCollections.observableArrayList("Today", "This Week", "This Month", "This Year", "Last Week", "Last Month");
 
     @FXML
-    protected void addExternalAccountAction(ActionEvent event){
-        
+    protected void addExternalAccountAction(ActionEvent event) {
+
     }
-    
+
+    private void updateInvoiceData(String period) {
+        MainApp.loadingDialog.show();
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.submit(() -> {
+            
+            // Get the invoice data
+            ObservableList<InvoiceStatus> invoiceStatus = new Accounting().invoiceStatus(period);
+            final SimpleDoubleProperty totalInvoices = new SimpleDoubleProperty();
+            final SimpleDoubleProperty totalPaidInvoices = new SimpleDoubleProperty();
+            final SimpleDoubleProperty totalUnpaidInvoices = new SimpleDoubleProperty();
+
+            invoiceStatus.forEach(status -> {
+                totalInvoices.set(totalInvoices.add(status.getInvoiceAmount()).doubleValue());
+                if (status.getPaid()) {
+                    totalPaidInvoices.set(totalPaidInvoices.add(status.getInvoiceAmount()).doubleValue());
+                } else {
+                    totalUnpaidInvoices.set(totalUnpaidInvoices.add(status.getInvoiceAmount()).doubleValue());
+                }
+            });
+
+            // Update the fields
+            Platform.runLater(() -> {
+                
+                totalInvoicesAmountLabel.setText(NumberFormat.getCurrencyInstance(US).format(totalInvoices.doubleValue()));
+                paidInvoicesProgressBar.setProgress(totalPaidInvoices.doubleValue() / totalInvoices.doubleValue());
+                invoicesAmountPaidBarLabel.setText(NumberFormat.getCurrencyInstance(US).format(totalPaidInvoices.doubleValue()));
+                unpaidInvoicesProgressBar.setProgress(totalUnpaidInvoices.doubleValue() / totalInvoices.doubleValue());
+                invoicesAmountUnpaidBarLabel.setText(NumberFormat.getCurrencyInstance(US).format(totalUnpaidInvoices.doubleValue()));
+                
+                // Close the loading dialog
+                MainApp.loadingDialog.close();
+            });
+
+            // Shutdown the executor
+            executor.shutdown();
+        });
+    }
+
     private void initInputs() {
         MainApp.loadingDialog.show();
-        
+
         // Combobox items
         invoicesFilterComboBox.setItems(FILTER_BY);
 
         // combobox defaults
         invoicesFilterComboBox.getSelectionModel().select(2);
+
+        invoicesFilterComboBox.valueProperty().addListener((obs, ov, nv) -> {
+            updateInvoiceData(nv);
+        });
 
         // setup pie chart
         ExecutorService executor = Executors.newCachedThreadPool();
@@ -89,48 +131,40 @@ public class DashboardFXMLController implements Initializable {
             Double totalPl = Math.abs(pl[0]) + Math.abs(pl[1]);
 
             ObservableList<PieChart.Data> pieChartData = accounting.totalExpenses("This Year");
-            expensesPieChart = new DoughnutChart(pieChartData);
-            final SimpleDoubleProperty totalExpenses = new SimpleDoubleProperty();
-            pieChartData.forEach(item -> {
-                totalExpenses.add(Math.abs(item.getPieValue()));
-            });
-            
-            System.out.println(totalExpenses);
-            
+
             ObservableList<InvoiceStatus> invoiceStatus = accounting.invoiceStatus(invoicesFilterComboBox.getSelectionModel().getSelectedItem());
             final SimpleDoubleProperty totalInvoices = new SimpleDoubleProperty();
             final SimpleDoubleProperty totalPaidInvoices = new SimpleDoubleProperty();
             final SimpleDoubleProperty totalUnpaidInvoices = new SimpleDoubleProperty();
-            invoiceStatus.forEach(status->{
-                totalInvoices.add(Math.abs(status.getInvoiceAmount()));
-                
-                if(status.getPaid()){
-                    totalPaidInvoices.add(Math.abs(status.getInvoiceAmount()));
-                }else{
-                    totalUnpaidInvoices.add(Math.abs(status.getInvoiceAmount()));
+
+            invoiceStatus.forEach(status -> {
+                totalInvoices.set(totalInvoices.add(status.getInvoiceAmount()).doubleValue());
+                if (status.getPaid()) {
+                    totalPaidInvoices.set(totalPaidInvoices.add(status.getInvoiceAmount()).doubleValue());
+                } else {
+                    totalUnpaidInvoices.set(totalUnpaidInvoices.add(status.getInvoiceAmount()).doubleValue());
                 }
-                
             });
+
             String totalInvoiceAmount = NumberFormat.getCurrencyInstance(US).format(totalInvoices.get());
             Platform.runLater(() -> {
-                
-                System.out.println("Net profit loss: " + netProfitLoss);
+
                 netProfitLossLabel.setText(netProfitLoss);
                 incomeAmountLabel.setText(income);
                 lossAmountLabel.setText(expenses);
                 incomeProgressBar.setProgress(pl[0] / totalPl);
                 expensesProgressBar.setProgress(pl[1] / totalPl);
-                totalExpensesLabel.setText(NumberFormat.getCurrencyInstance(Locale.US).format(totalExpenses.get()));
+                totalExpensesLabel.setText(expenses);
                 expensesPieChart.setData(pieChartData);
                 totalInvoicesAmountLabel.setText(totalInvoiceAmount);
-                paidInvoicesProgressBar.setProgress(totalPaidInvoices.doubleValue());
+                paidInvoicesProgressBar.setProgress(totalPaidInvoices.doubleValue() / totalInvoices.doubleValue());
                 invoicesAmountPaidBarLabel.setText(NumberFormat.getCurrencyInstance(US).format(totalPaidInvoices.doubleValue()));
-                unpaidInvoicesProgressBar.setProgress(totalUnpaidInvoices.doubleValue());
+                unpaidInvoicesProgressBar.setProgress(totalUnpaidInvoices.doubleValue() / totalInvoices.doubleValue());
                 invoicesAmountUnpaidBarLabel.setText(NumberFormat.getCurrencyInstance(US).format(totalUnpaidInvoices.doubleValue()));
-                
+
                 MainApp.loadingDialog.close();
             });
-            
+
             executor.shutdown();
         });
 

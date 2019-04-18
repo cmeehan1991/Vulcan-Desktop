@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cbmwebdevelopment.accounting;
+package com.cbmwebdevelopment.project;
 
 /**
  *
  * @author cmeehan
  */
-public class PNL {
-    
+public class ProjectIncomeExpensesTableController {
+   
+    public static class ProjectIncomeExpenses{
+        
+    }
 }

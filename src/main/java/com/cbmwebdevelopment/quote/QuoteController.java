@@ -37,7 +37,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.StringConverter;
@@ -75,12 +74,11 @@ public class QuoteController implements Initializable {
 
     String quoteId, customerId, customer, quoteDate, billingAddress;
     ObservableList<InvoiceItems> quoteItems;
-    
 
     @FXML
     protected void sendToInvoiceAction(ActionEvent event) {
         MainApp.loadingDialog.show();
-        
+
         customerId = customerComboBox.getSelectionModel().getSelectedItem().getId();
         quoteDate = quoteDateDatePicker.getValue().toString();
         String shippingAddress = billingAddress = billingAddressTextArea.getText();
@@ -91,8 +89,8 @@ public class QuoteController implements Initializable {
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(() -> {
             Invoice invoice = new Invoice();
-            String invoiceId = invoice.saveInvoice(invoiceData);
-
+            String invoiceId = String.valueOf(invoice.saveInvoice(invoiceData));
+            
             Platform.runLater(() -> {
                 if (invoiceId != null) {
                     try {
@@ -119,7 +117,7 @@ public class QuoteController implements Initializable {
     @FXML
     protected void saveQuoteAction(ActionEvent event) {
         MainApp.loadingDialog.show();
-        
+
         if (isValid()) {
             System.out.println("Valid: " + isValid());
             ExecutorService executor = Executors.newFixedThreadPool(15);
@@ -174,9 +172,9 @@ public class QuoteController implements Initializable {
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(() -> {
             Customers customers = new Customers();
-            ObservableList<Customer> customer = FXCollections.observableArrayList(customers.getCustomers());
+            ObservableList<Customer> cust = FXCollections.observableArrayList(customers.getCustomers());
             Platform.runLater(() -> {
-                customerComboBox.setItems(customer);
+                customerComboBox.setItems(cust);
                 customerComboBox.setConverter(new StringConverter<Customer>() {
 
                     @Override
@@ -197,7 +195,7 @@ public class QuoteController implements Initializable {
 
     private void getQuote(String quoteId) {
         MainApp.loadingDialog.show();
-        
+
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(() -> {
             Quote quote = new Quote();
@@ -209,7 +207,7 @@ public class QuoteController implements Initializable {
             this.quoteDate = quoteData.getQuoteDate();
             this.billingAddress = quoteData.getBillingAddress();
             this.quoteItems = quoteData.getQuoteItems();
-            
+
             Platform.runLater(() -> {
 
                 if (quoteData.getQuoteId() != null && !quoteData.getQuoteId().isEmpty()) {
@@ -252,13 +250,11 @@ public class QuoteController implements Initializable {
     }
 
     private void setCustomerInfo() {
-        MainApp.loadingIndicator.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
-        MainApp.loadingIndicator.toFront();
-
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(() -> {
-
+            System.out.println("Setting customer address");
             String customerAddress = new Customers().getCustomerAddress(customerComboBox.getSelectionModel().getSelectedItem().getId());
+            System.out.println("Customer Address: " + customerAddress);
             Platform.runLater(() -> {
                 billingAddressTextArea.setText(customerAddress);
             });
@@ -275,20 +271,21 @@ public class QuoteController implements Initializable {
         setButtonsDisabled(true);
 
         customerComboBox.getSelectionModel().selectedItemProperty().addListener((obs, ov, nv) -> {
-            if (!nv.getName().isEmpty()) {
-                setCustomerInfo();
-            }
+            System.out.println(nv.getId());
+            setCustomerInfo();
         });
 
         quoteIdTextField.setOnAction(evt -> {
             getQuote(quoteIdTextField.getText());
         });
-        
+
         MainApp.loadingDialog.close();
     }
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {

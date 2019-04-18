@@ -6,6 +6,7 @@
 package com.cbmwebdevelopment.quote;
 
 import com.cbmwebdevelopment.invoices.InvoiceTableController.InvoiceItems;
+import static com.cbmwebdevelopment.main.Strings.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,8 +25,6 @@ import org.json.JSONObject;
  */
 public class Quote {
 
-    private final String LINK = "http://www.meehanwoodworking.com/vulcan/classes/Quote.php";
-
     /**
      *
      * @param id
@@ -35,12 +34,12 @@ public class Quote {
         QuoteData quoteData = new QuoteData();
 
         try {
-            URL url = new URL(LINK);
+            URL url = new URL(QUOTES_LINK);
             URLConnection conn = url.openConnection();
             conn.setDoOutput(true);
 
-            String data = URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("get_quote_data", "UTF-8");
-            data += "&" + URLEncoder.encode("quote_id", "UTF-8") + "=" + URLEncoder.encode(id, "UTF-8");
+            String data = URLEncoder.encode("action", ENC) + "=" + URLEncoder.encode("get_quote_data", ENC);
+            data += "&" + URLEncoder.encode("quote_id", ENC) + "=" + URLEncoder.encode(id, ENC);
 
             OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
             wr.write(data);
@@ -73,12 +72,12 @@ public class Quote {
     private ObservableList<InvoiceItems> getQuoteItems(String id) {
         ObservableList<InvoiceItems> quoteItems = FXCollections.observableArrayList();
         try {
-            URL url = new URL(LINK);
+            URL url = new URL(QUOTES_LINK);
             URLConnection conn = url.openConnection();
             conn.setDoOutput(true);
 
-            String data = URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("get_quote_items", "UTF-8");
-            data += "&" + URLEncoder.encode("quote_id", "UTF-8") + "=" + URLEncoder.encode(id, "UTF-8");
+            String data = URLEncoder.encode("action", ENC) + "=" + URLEncoder.encode("get_quote_items", ENC);
+            data += "&" + URLEncoder.encode("quote_id", ENC) + "=" + URLEncoder.encode(id, ENC);
 
             OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
             wr.write(data);
@@ -119,15 +118,15 @@ public class Quote {
      */
     public String saveQuote(String customerId, String date, String quoteNumber, String billingAddress, ObservableList<InvoiceItems> quoteData) {
         try {
-            URL url = new URL(LINK);
+            URL url = new URL(QUOTES_LINK);
             URLConnection conn = url.openConnection();
             conn.setDoOutput(true);
 
-            String data = URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("save_quote", "UTF-8");
-            data += "&" + URLEncoder.encode("customer_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(customerId), "UTF-8");
-            data += "&" + URLEncoder.encode("quote_date", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(date), "UTF-8");
-            data += "&" + URLEncoder.encode("billing_address", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(billingAddress), "UTF-8");
-            data += "&" + URLEncoder.encode("quote_number", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(quoteNumber), "UTF-8");
+            String data = URLEncoder.encode("action", ENC) + "=" + URLEncoder.encode("save_quote", ENC);
+            data += "&" + URLEncoder.encode("customer_id", ENC) + "=" + URLEncoder.encode(String.valueOf(customerId), ENC);
+            data += "&" + URLEncoder.encode("quote_date", ENC) + "=" + URLEncoder.encode(String.valueOf(date), ENC);
+            data += "&" + URLEncoder.encode("billing_address", ENC) + "=" + URLEncoder.encode(String.valueOf(billingAddress), ENC);
+            data += "&" + URLEncoder.encode("quote_number", ENC) + "=" + URLEncoder.encode(String.valueOf(quoteNumber), ENC);
 
             OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
             wr.write(data);
@@ -140,15 +139,12 @@ public class Quote {
                 sb.append(line);
                 break;
             }
-            
             JSONObject jsonObj = new JSONObject(sb.toString());
             if (jsonObj.getBoolean("success")) {
                 quoteNumber = jsonObj.getString("key");
-                System.out.println(quoteNumber);
             }
 
             if (!quoteData.isEmpty() && quoteNumber != null) {
-                System.out.println("Saving Items");
                 saveQuoteItems(quoteNumber, quoteData);
             }
             return quoteNumber;
@@ -165,8 +161,9 @@ public class Quote {
      * @return
      */
     private boolean saveQuoteItems(String quoteId, ObservableList<InvoiceItems> quoteData) {
+        String sql = "INSERT INTO QUOTE_ITEMS(ITEM, QUANTITY, DESCRIPTION, UNIT_PRICE, ID, QUOTE_ID) VALUES(?,?,?,?,?,?) ON DUPLICATE KEY UPDATE ITEM = ?, QUANTITY = ?, DESCRIPTION = ?, UNIT_PRICE = ?, ID = ?, QUOTE_ID = ?";
         try {
-            URL url = new URL(LINK);
+            URL url = new URL(QUOTES_LINK);
             URLConnection conn = url.openConnection();
             conn.setDoOutput(true);
 
@@ -183,8 +180,8 @@ public class Quote {
                 items.put(obj);
             });
             
-            String data = URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("save_quote_items", "UTF-8");
-            data += "&" + URLEncoder.encode("items", "UTF-8") + "=" + URLEncoder.encode(items.toString(), "UTF-8");
+            String data = URLEncoder.encode("action", ENC) + "=" + URLEncoder.encode("save_quote_items", ENC);
+            data += "&" + URLEncoder.encode("items", ENC) + "=" + URLEncoder.encode(items.toString(), ENC);
             
             OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
             wr.write(data);

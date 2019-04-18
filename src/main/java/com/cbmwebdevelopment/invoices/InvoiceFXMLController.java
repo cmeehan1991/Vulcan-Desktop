@@ -19,10 +19,7 @@ import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXSnackbar.SnackbarEvent;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
-import java.awt.Desktop;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -30,12 +27,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Locale;
+import static java.util.Locale.US;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,8 +50,6 @@ import javafx.util.StringConverter;
  * @author cmeehan
  */
 public class InvoiceFXMLController implements Initializable {
-
-    String invoiceId;
 
     @FXML
     JFXComboBox<Customer> customerComboBox;
@@ -73,11 +69,12 @@ public class InvoiceFXMLController implements Initializable {
     @FXML
     JFXTextField invoiceIdTextField, subtotalTextField, totalTextField, paymentsAppliedTextField, balanceDueTextField;
 
+    public static Integer invoiceId;
     protected boolean isNew = true;
     private HashMap<String, Node> missingItems;
     private InvoiceTableController invoiceTableController;
-    private String id, customerId, invoiceDate, status, billingAddress, shippingAddress, memo, taxRate;
-    double subTotal = 0.00, total;
+    private String customerId, invoiceDate, status, billingAddress, shippingAddress, memo, taxRate;
+    private double subTotal, total;
     private ObservableList<InvoiceItems> invoiceItems;
     private InvoiceData invoiceData;
     private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -94,7 +91,7 @@ public class InvoiceFXMLController implements Initializable {
         if (validateFields()) {
             ExecutorService executor = Executors.newCachedThreadPool();
             executor.submit(() -> {
-                id = invoiceIdTextField.getText();
+                invoiceId = invoiceIdTextField.getText().isEmpty() ? 0 : Integer.parseInt(invoiceIdTextField.getText());
                 customerId = customerComboBox.getSelectionModel().getSelectedItem().getId();
                 invoiceDate = invoiceDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 billingAddress = billingAddressTextArea.getText();
@@ -103,18 +100,21 @@ public class InvoiceFXMLController implements Initializable {
                 taxRate = taxComboBox.getSelectionModel().getSelectedItem();
                 memo = memoTextArea.getText();
 
-                invoiceData = new InvoiceData(id, customerId, invoiceDate, status, billingAddress, shippingAddress, memo, taxRate, invoiceItems);
+                invoiceData = new InvoiceData(invoiceId, customerId, invoiceDate, status, billingAddress, shippingAddress, memo, taxRate, invoiceItems);
                 invoiceId = new Invoice().saveInvoice(invoiceData);
 
                 Platform.runLater(() -> {
-                    if (invoiceId.matches("-?\\d+(\\.\\d_)?")) {
-                        invoiceIdTextField.setText(invoiceId);
+                    if (invoiceId > 0) {
+                        invoiceIdTextField.setText(invoiceId.toString());
                         isNew = false;
                         notifyUpdate("Invoice Saved");
                     } else {
                         System.err.println(invoiceId);
                     }
                 });
+
+                executor.shutdown();
+
             });
 
         } else {
@@ -137,7 +137,7 @@ public class InvoiceFXMLController implements Initializable {
 
     @FXML
     protected void receivePaymentAction(ActionEvent event) {
-         try {
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PaymentsFXML.fxml"));
             AnchorPane paymentsPane = (AnchorPane) loader.load();
 
@@ -160,7 +160,7 @@ public class InvoiceFXMLController implements Initializable {
     }
 
     private InvoiceData setVariables() {
-        id = invoiceIdTextField.getText();
+        invoiceId = Integer.parseInt(invoiceIdTextField.getText());
         customerId = customerComboBox.getSelectionModel().getSelectedItem().getId();
         invoiceDate = invoiceDatePicker.getValue().format(FORMATTER);
         billingAddress = billingAddressTextArea.getText();
@@ -169,7 +169,7 @@ public class InvoiceFXMLController implements Initializable {
         memo = memoTextArea.getText();
         taxRate = taxComboBox.getSelectionModel().getSelectedItem();
         invoiceItems = invoiceItemsTableView.getItems();
-        invoiceData = new InvoiceData(id, customerId, invoiceDate, null, billingAddress, shippingAddress, memo, taxRate, invoiceItems);
+        invoiceData = new InvoiceData(invoiceId, customerId, invoiceDate, null, billingAddress, shippingAddress, memo, taxRate, invoiceItems);
         return invoiceData;
     }
 
@@ -197,22 +197,28 @@ public class InvoiceFXMLController implements Initializable {
     }
 
     private boolean validateFields() {
+        missingItems = new HashMap<>();
+
         if (customerComboBox.getSelectionModel().getSelectedItem().getId() == null) {
             missingItems.put("Customer", customerComboBox);
+        }
+
+        if (taxComboBox.getSelectionModel().getSelectedItem() == null) {
+            missingItems.put("Tax Rate", taxComboBox);
         }
 
         return missingItems.isEmpty();
     }
 
-    public void getInvoice(String invoiceId) {
+    public void getInvoice(String id) {
         MainApp.loadingDialog.show();
 
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(() -> {
             Invoice invoice = new Invoice();
-            InvoiceData data = invoice.getInvoice(invoiceId);
+            InvoiceData data = invoice.getInvoice(id);
             Platform.runLater(() -> {
-                id = data.getId();
+                invoiceId = data.getId();
                 customerId = data.getCustomerId();
                 DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 LocalDate dt = LocalDate.parse(data.getInvoiceDate(), FORMATTER);
@@ -227,25 +233,28 @@ public class InvoiceFXMLController implements Initializable {
                 customerComboBox.getItems().stream().filter((c) -> (c.getId().equals(customerId))).forEachOrdered((c) -> {
                     customerComboBox.getSelectionModel().select(c);
                 });
+
                 invoiceDatePicker.setValue(dt);
                 billingAddressTextArea.setText(billingAddress);
                 shippingAddressTextArea.setText(shippingAddress);
                 memoTextArea.setText(memo);
                 taxComboBox.getSelectionModel().select(taxRate);
-                invoiceItemsTableView.getItems().setAll(invoiceItems);
+                if (invoiceItems.size() < 1) {
+                    invoiceItems.add(new InvoiceItems(1, "", "", 0.0, "0.00", "0.00"));
+                } else {
+                    invoiceItemsTableView.getItems().setAll(invoiceItems);
+                }
+
                 invoiceItems.forEach(item -> {
-                    try {
-                        subTotal += NumberFormat.getCurrencyInstance().parse(item.getTotal()).doubleValue();
-                    } catch (ParseException ex) {
-                        System.err.println(ex.getMessage());
-                    }
+                    subTotal += Double.parseDouble(item.getTotal());
                 });
                 subtotalTextField.setText(NumberFormat.getCurrencyInstance().format(subTotal));
                 taxRate = taxRate == null ? "No Tax" : taxRate;
                 totalTextField.setText(calculateTotal(NumberFormat.getCurrencyInstance().format(subTotal), taxRate));
-                setInputsForUpdate(true);
+                setInputsForUpdate(false);
                 MainApp.loadingDialog.close();
             });
+
             executor.shutdown();
         });
     }
@@ -300,6 +309,27 @@ public class InvoiceFXMLController implements Initializable {
     }
 
     /**
+     * Get customer data such as billing and shipping addresses and set the
+     * respective text fields/areas.
+     *
+     * @param customerId
+     */
+    private void getCustomerData(String customerId) {
+        MainApp.loadingDialog.show();
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.submit(() -> {
+            Customers customers = new Customers();
+            String address = customers.getCustomerAddress(customerId);
+            Platform.runLater(() -> {
+                billingAddressTextArea.setText(address);
+                shippingAddressTextArea.setText(address);
+                MainApp.loadingDialog.close();
+            });
+            executor.shutdown();
+        });
+    }
+
+    /**
      * Enable/disable the inputs based on the invoice status of new/update.
      *
      * @param disable
@@ -318,38 +348,71 @@ public class InvoiceFXMLController implements Initializable {
         subtotalTextField.setDisable(disable);
         taxComboBox.setDisable(disable);
         totalTextField.setDisable(disable);
-//        paymentsAppliedTextField.setDisable(disable);
+        paymentsAppliedTextField.setDisable(disable);
         balanceDueTextField.setDisable(disable);
+    }
+
+    /**
+     * Updates the total & subtotal values
+     */
+    public void updateSubtotal() {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.submit(() -> {
+            // Initialize the subtotal and total values at 0.00
+            subTotal = 0.00;
+            total = 0.00;
+
+            // Get the invoice items and calculate the subtotal
+            invoiceItems.forEach(item -> {
+                if (!item.getTotal().isEmpty()) {
+                    try {
+                        subTotal += NumberFormat.getCurrencyInstance(US).parse(item.getTotal()).doubleValue();
+                    } catch (ParseException ex) {
+                        System.err.println(ex.getMessage());
+                    }
+                }
+            });
+
+            // Get the applicable tax rate
+            taxRate = taxComboBox.getSelectionModel().getSelectedItem();
+
+// Calculate the total based on the applicable tax rate
+            if (!taxRate.equals("No Tax")) {
+                double tx = Double.parseDouble(taxRate.replace("%", "")) / 100;
+                total = (tx * subTotal) + subTotal;
+            } else {
+                total = subTotal;
+            }
+
+            executor.shutdown();
+
+            Platform.runLater(() -> {
+
+                // Set the values for each respective field.
+                subtotalTextField.setText(NumberFormat.getCurrencyInstance(Locale.US).format(subTotal));
+                totalTextField.setText(NumberFormat.getCurrencyInstance(Locale.US).format(total));
+            });
+        });
+
     }
 
     private void initInputs() {
         MainApp.loadingDialog.show();
+
         getCustomers();
+
         taxComboBox.setItems(TAX_RATES);
+
         invoiceDatePicker.setValue(LocalDate.now());
+
         invoiceTableController = new InvoiceTableController();
+        invoiceTableController.invoiceFxmlController = this;
         invoiceTableController.tableController(invoiceItemsTableView);
         invoiceItemsTableView.setEditable(true);
 
         invoiceItems = invoiceItemsTableView.getItems();
-        invoiceItems.addListener((ListChangeListener.Change<? extends InvoiceItems> c) -> {
-            total = 0;
-            subTotal = 0;
-            c.getList().forEach(item -> {
-                try {
-                    subTotal += NumberFormat.getCurrencyInstance().parse(item.getTotal()).doubleValue();
-                } catch (ParseException ex) {
-                    System.err.println(ex.getMessage());
-                }
-            });
-            taxRate = taxComboBox.getSelectionModel().getSelectedItem();
-
-            if (taxRate != null && !taxRate.equals("No Tax") && !taxRate.isEmpty()) {
-                double tx = Double.parseDouble(taxRate.replace("%", "")) / 100;
-                total = (tx * subTotal) + subTotal;
-            }
-            subtotalTextField.setText(NumberFormat.getCurrencyInstance(Locale.US).format(subTotal));
-            totalTextField.setText(NumberFormat.getCurrencyInstance(Locale.US).format(total));
+        invoiceItems.addListener((Change<? extends InvoiceItems> c) -> {
+            updateSubtotal();
         });
 
         invoiceIdTextField.setOnAction(evt -> {
@@ -357,7 +420,9 @@ public class InvoiceFXMLController implements Initializable {
         });
 
         taxComboBox.getSelectionModel().selectedItemProperty().addListener((obs, ov, nv) -> {
+            taxRate = nv;
             if (!nv.equals("No Tax") && subTotal != 0) {
+                System.out.println(taxRate.replace("%", ""));
                 double tax = Double.parseDouble(taxRate.replace("$=%", "")) / 100;
                 total = (subTotal * tax) + total;
             } else {
@@ -366,6 +431,10 @@ public class InvoiceFXMLController implements Initializable {
 
             totalTextField.setText(NumberFormat.getCurrencyInstance(Locale.US).format(total));
 
+        });
+
+        customerComboBox.valueProperty().addListener((obs, ov, nv) -> {
+            getCustomerData(nv.getId());
         });
 
         MainApp.loadingDialog.close();

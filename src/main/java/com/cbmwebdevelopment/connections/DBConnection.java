@@ -20,7 +20,7 @@ public class DBConnection {
     private final String LOCAL_DB_USER = "root";
     private final String LOCAL_DB_PASS = "root";
     private final String REMOTE_URL = "jdbc:mysql://ns8139.hostgator.com/cmeehan_vulcan?useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-    private final String LOCAL_URL = "jdbc:mysql://localhost:3306/vulcan";
+    private final String LOCAL_URL = "jdbc:mysql://localhost:3306/vulcan?useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private Connection connection;
     public Connection connect(){        
         try{

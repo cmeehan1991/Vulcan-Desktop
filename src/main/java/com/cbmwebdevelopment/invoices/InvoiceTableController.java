@@ -36,13 +36,14 @@ public class InvoiceTableController {
     final Callback<TableColumn<InvoiceItems, Double>, TableCell<InvoiceItems, Double>> numberCell = (TableColumn<InvoiceItems, Double> param) -> new NumberFormatCell();
     final Callback<TableColumn<InvoiceItems, Void>, TableCell<InvoiceItems, Void>> removeCell = (TableColumn<InvoiceItems, Void> param) -> new RemoveFormatCell();
     final Callback<TableColumn<InvoiceItems, Void>, TableCell<InvoiceItems, Void>> addCell = (TableColumn<InvoiceItems, Void> param) -> new AddFormatCell();
-
+    public static InvoiceFXMLController invoiceFxmlController;
+    
     public void tableController(TableView tableView) {
         TableColumn<InvoiceItems, Integer> idColumn = new TableColumn<>("");
         TableColumn<InvoiceItems, String> itemColumn = new TableColumn<>("Item");
         TableColumn<InvoiceItems, String> descriptionColumn = new TableColumn<>("Description");
         TableColumn<InvoiceItems, Double> quantityColumn = new TableColumn<>("Quantity");
-        TableColumn<InvoiceItems, String> priceColumn = new TableColumn<>("Price");
+        TableColumn<InvoiceItems, String> priceColumn = new TableColumn<>("Unit Price");
         TableColumn<InvoiceItems, String> totalColumn = new TableColumn<>("Total");
         TableColumn<InvoiceItems, Void> removeColumn = new TableColumn<>("");
         TableColumn<InvoiceItems, Void> addColumn = new TableColumn<>("");
@@ -51,11 +52,12 @@ public class InvoiceTableController {
         idColumn.setVisible(false);
         idColumn.setPrefWidth(0);
 
-        ObservableList<String> items = FXCollections.observableArrayList("Lumber", "Hardware", "Labor", "Shipping", "Finish", "Other");
+        ObservableList<String> items = FXCollections.observableArrayList("Materials", "Lumber", "Hardware", "Labor", "Shipping", "Finish", "Refinishing", "Product", "Other", "Discount");
         itemColumn.setCellFactory(ComboBoxTableCell.forTableColumn(items));
         itemColumn.setCellValueFactory(new PropertyValueFactory("item"));
         itemColumn.setEditable(true);
-        itemColumn.setOnEditCommit((TableColumn.CellEditEvent<InvoiceItems, String> t)->{
+        itemColumn.setPrefWidth(150);
+        itemColumn.setOnEditCommit((TableColumn.CellEditEvent<InvoiceItems, String> t) -> {
             int row = t.getTablePosition().getRow();
             t.getTableView().getItems().get(row).setItem(t.getNewValue());
         });
@@ -63,6 +65,7 @@ public class InvoiceTableController {
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         descriptionColumn.setCellFactory(textFieldCell);
         descriptionColumn.setEditable(true);
+        descriptionColumn.setPrefWidth(300);
         descriptionColumn.setOnEditCommit((TableColumn.CellEditEvent<InvoiceItems, String> t) -> {
             int row = t.getTablePosition().getRow();
             t.getTableView().getItems().get(row).setDescription(t.getNewValue());
@@ -71,7 +74,31 @@ public class InvoiceTableController {
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         quantityColumn.setCellFactory(numberCell);
         quantityColumn.setEditable(true);
+        quantityColumn.widthProperty().add(40);
         quantityColumn.setOnEditCommit((TableColumn.CellEditEvent<InvoiceItems, Double> t) -> {
+
+            // Get the current row
+            int row = t.getTablePosition().getRow();
+
+            // Set the new value
+            t.getTableView().getItems().get(row).setQuantity(t.getNewValue());
+            if (t.getNewValue() != null && t.getTableView().getItems().get(row).getPrice() != null) {
+                try {
+                    // Calculate the total
+                    double quantity = t.getNewValue();
+                    double price = NumberFormat.getInstance().parse(t.getTableView().getItems().get(row).getPrice()).doubleValue();
+                    Number total = quantity * price;
+                    
+                    // Set the total
+                    t.getTableView().getItems().get(row).setTotal(NumberFormat.getCurrencyInstance().format(total));
+                    invoiceFxmlController.updateSubtotal();
+                } catch (ParseException ex) {
+                    System.err.println(ex.getMessage());
+                }
+            }
+        });
+
+        quantityColumn.setOnEditCancel((TableColumn.CellEditEvent<InvoiceItems, Double> t) -> {
 
             // Get the current row
             int row = t.getTablePosition().getRow();
@@ -86,6 +113,8 @@ public class InvoiceTableController {
                     Number total = quantity * price;
                     // Set the total
                     t.getTableView().getItems().get(row).setTotal(NumberFormat.getCurrencyInstance().format(total));
+                    t.getTableView().refresh();
+                    invoiceFxmlController.updateSubtotal();
                 } catch (ParseException ex) {
                     System.err.println(ex.getMessage());
                 }
@@ -96,23 +125,24 @@ public class InvoiceTableController {
         priceColumn.setCellFactory(moneyCell);
         priceColumn.setEditable(true);
         priceColumn.setOnEditCommit((TableColumn.CellEditEvent<InvoiceItems, String> t) -> {
-
             // Get the current row
             int row = t.getTablePosition().getRow();
 
             // Set the new value
             t.getTableView().getItems().get(row).setPrice(t.getNewValue());
             if (t.getNewValue() != null && t.getTableView().getItems().get(row).getPrice() != null) {
-                try{
-                // Calculate the total
-                double quantity = t.getTableView().getItems().get(row).getQuantity();
-                double price = NumberFormat.getInstance().parse(t.getNewValue()).doubleValue();
+                try {
+                    // Calculate the total
+                    double quantity = t.getTableView().getItems().get(row).getQuantity();
+                    double price = NumberFormat.getInstance().parse(t.getNewValue()).doubleValue();
 
-                Number total = quantity * price;
+                    Number total = quantity * price;
 
-                // Set the total
-                t.getTableView().getItems().get(row).setTotal(NumberFormat.getCurrencyInstance().format(total));
-                }catch(ParseException ex){
+                    // Set the total
+                    t.getTableView().getItems().get(row).setTotal(NumberFormat.getCurrencyInstance().format(total));
+                    t.getTableView().refresh();
+                    invoiceFxmlController.updateSubtotal();
+                } catch (ParseException ex) {
                     System.err.println(ex.getMessage());
                 }
             }
@@ -120,11 +150,12 @@ public class InvoiceTableController {
 
         totalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
         totalColumn.setCellFactory(moneyCell);
-        
+        totalColumn.setEditable(false);
+
         removeColumn.setCellFactory(removeCell);
         addColumn.setCellFactory(addCell);
 
-        tableView.setItems(FXCollections.observableArrayList(new InvoiceItems(1, "", "", 0.0, "$0.00", "$0.00")));
+        tableView.setItems(FXCollections.observableArrayList(new InvoiceItems(1, "", "", 0.0, "0.00", "0.00")));
         tableView.getColumns().setAll(idColumn, itemColumn, descriptionColumn, quantityColumn, priceColumn, totalColumn, removeColumn, addColumn);
         tableView.setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
     }

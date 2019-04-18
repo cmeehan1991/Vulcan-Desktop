@@ -6,6 +6,7 @@
 package com.cbmwebdevelopment.invoices;
 
 import com.cbmwebdevelopment.invoices.InvoiceTableController.InvoiceItems;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,12 +16,13 @@ import javafx.collections.ObservableList;
  * @author cmeehan
  */
 public class InvoiceData {
-
-    private final SimpleStringProperty ID, CUSTOMER_ID, INVOICE_DATE, STATUS, BILLING_ADDRESS, SHIPPING_ADDRESS, MEMO, TAX_RATE;
+    
+    private final SimpleIntegerProperty ID;
+    private final SimpleStringProperty CUSTOMER_ID, INVOICE_DATE, STATUS, BILLING_ADDRESS, SHIPPING_ADDRESS, MEMO, TAX_RATE;
     private final ObservableList<InvoiceItems> INVOICE_ITEMS;
 
     public InvoiceData() {
-        this.ID = new SimpleStringProperty();
+        this.ID = new SimpleIntegerProperty();
         this.CUSTOMER_ID = new SimpleStringProperty();
         this.INVOICE_DATE = new SimpleStringProperty();
         this.STATUS = new SimpleStringProperty();
@@ -31,8 +33,8 @@ public class InvoiceData {
         this.INVOICE_ITEMS = FXCollections.observableArrayList();
     }
 
-    public InvoiceData(String id, String customerId, String invoiceDate, String status, String billingAddress, String shippingAddress, String memo, String taxRate, ObservableList<InvoiceItems> invoiceItems) {
-        this.ID = new SimpleStringProperty(id);
+    public InvoiceData(Integer id, String customerId, String invoiceDate, String status, String billingAddress, String shippingAddress, String memo, String taxRate, ObservableList<InvoiceItems> invoiceItems) {
+        this.ID = new SimpleIntegerProperty(id);
         this.CUSTOMER_ID = new SimpleStringProperty(customerId);
         this.INVOICE_DATE = new SimpleStringProperty(invoiceDate);
         this.STATUS = new SimpleStringProperty(status);
@@ -43,11 +45,11 @@ public class InvoiceData {
         this.INVOICE_ITEMS = invoiceItems;
     }
 
-    public String getId() {
+    public Integer getId() {
         return this.ID.get();
     }
 
-    public void setId(String val) {
+    public void setId(Integer val) {
         this.ID.set(val);
     }
 

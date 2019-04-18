@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="588.0" prefWidth="850.0" styleClass="mainFxmlClass" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cbmwebdevelopment.project.ProjectsDashboardFXMLController">
+   <children>
+      <ToolBar layoutX="36.0" prefHeight="40.0" prefWidth="200.0" styleClass="primaryToolBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+            <JFXButton defaultButton="true" onAction="#newProjectAction" text="New">
+               <graphic>
+                  <FontAwesomeIcon iconName="PENCIL_SQUARE_ALT" />
+               </graphic></JFXButton>
+            <Separator orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
+            <JFXButton fx:id="updateStatusButton" disable="true" onAction="#updateProjectStatusAction" text="Update Status">
+               <graphic>
+                  <FontAwesomeIcon iconName="REFRESH" />
+               </graphic>
+            </JFXButton>
+        </items>
+      </ToolBar>
+      <TableView fx:id="projectsTableView" layoutX="14.0" layoutY="40.0" prefHeight="548.0" prefWidth="820.0" styleClass="projectsTable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+        <columns>
+            <TableColumn editable="false" prefWidth="75.0" text="Project ID" visible="false" />
+          <TableColumn prefWidth="606.0" text="Project" />
+          <TableColumn prefWidth="129.0" text="Project Status" />
+            <TableColumn prefWidth="113.0" text="Deadline" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

@@ -72,6 +72,7 @@ public class NumberFormatCell extends TableCell<InvoiceItems, Double> {
                 switch (event.getCode()) {
                     case ENTER:
                         commitEdit(Double.parseDouble(textField.getText()));
+                        event.consume();
                         break;
                     case TAB:
                         commitEdit(Double.parseDouble(textField.getText()));

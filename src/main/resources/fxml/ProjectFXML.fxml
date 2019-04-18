@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="534.0" prefWidth="873.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cbmwebdevelopment.project.ProjectFXMLController">
+    <stylesheets>
+        <URL value="@/styles/Styles.css" />
+    </stylesheets>
+   <children>
+      <JFXTextField fx:id="projectIdTextField" labelFloat="true" layoutX="7.0" layoutY="1.0" promptText="Project ID" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
+      <JFXComboBox fx:id="projectStatusComboBox" disable="true" labelFloat="true" layoutX="574.0" layoutY="15.0" prefHeight="27.0" prefWidth="199.0" promptText="Status" AnchorPane.rightAnchor="15.0" />
+      <JFXTabPane prefHeight="484.0" prefWidth="871.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+         <tabs>
+            <Tab text="Project Info">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="605.0" prefWidth="955.0">
+                     <children>
+                        <JFXTextField fx:id="projectTitleTextField" labelFloat="true" layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="330.0" promptText="Project Title" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="18.0" />
+                        <JFXComboBox fx:id="clientComboBox" layoutX="345.0" layoutY="18.0" prefHeight="27.0" prefWidth="210.0" promptText="Client" AnchorPane.leftAnchor="360.0" AnchorPane.topAnchor="18.0" />
+                        <JFXDatePicker fx:id="startDatePicker" layoutX="570.0" layoutY="18.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" promptText="Start Date" AnchorPane.leftAnchor="585.0" AnchorPane.topAnchor="18.0" />
+                        <JFXDatePicker fx:id="deadlineDatePicker" layoutX="570.0" layoutY="63.0" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" promptText="Deadline" AnchorPane.leftAnchor="585.0" AnchorPane.topAnchor="63.0" />
+                        <JFXTextArea fx:id="projectDescriptionTextArea" labelFloat="true" layoutX="14.0" layoutY="58.0" prefHeight="100.0" prefWidth="562.0" promptText="Project Description" wrapText="true" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="63.0" />
+                        <JFXTextField fx:id="streetAddressTextField" labelFloat="true" layoutX="14.0" layoutY="174.0" prefHeight="27.0" prefWidth="330.0" promptText="Street Address" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="174.0" />
+                        <JFXTextField fx:id="secondaryAddressTextField" labelFloat="true" layoutX="14.0" layoutY="216.0" prefHeight="27.0" prefWidth="330.0" promptText="P.O Box, Suite, Unit #" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="216.0" />
+                        <JFXTextField fx:id="cityTextField" labelFloat="true" layoutX="14.0" layoutY="261.0" prefHeight="27.0" prefWidth="330.0" promptText="City" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="261.0" />
+                        <JFXComboBox fx:id="stateComboBox" layoutX="14.0" layoutY="303.0" prefHeight="27.0" prefWidth="150.0" promptText="State" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="303.0" />
+                        <JFXTextField fx:id="postalCodeTextField" labelFloat="true" layoutX="178.0" layoutY="303.0" prefHeight="27.0" prefWidth="168.0" promptText="Postal code" AnchorPane.leftAnchor="178.0" AnchorPane.topAnchor="303.0" />
+                        <JFXRadioButton fx:id="commissionRadioButton" layoutX="585.0" layoutY="105.0" prefHeight="17.0" prefWidth="184.0" selected="true" text="Commission" AnchorPane.leftAnchor="585.0" AnchorPane.topAnchor="105.0">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="projectTypeGroup" />
+                           </toggleGroup>
+                        </JFXRadioButton>
+                        <JFXRadioButton fx:id="commercialRadioButton" layoutX="585.0" layoutY="155.0" prefHeight="17.0" prefWidth="184.0" text="Commercial" toggleGroup="$projectTypeGroup" AnchorPane.leftAnchor="585.0" AnchorPane.topAnchor="155.0" />
+                        <JFXRadioButton fx:id="residentialRadioButton" layoutX="585.0" layoutY="129.0" prefHeight="17.0" prefWidth="184.0" text="Residential" toggleGroup="$projectTypeGroup" AnchorPane.leftAnchor="585.0" AnchorPane.topAnchor="129.0" />
+                        <JFXButton buttonType="RAISED" layoutX="700.0" layoutY="406.0" text="Save" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Income/Expenses">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="projectIncomeExpenseTable" layoutX="15.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="14.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" resizable="false" text="ID" visible="false" />
+                            <TableColumn prefWidth="209.0" text="Item" />
+                              <TableColumn prefWidth="69.0" text="Quantity" />
+                              <TableColumn prefWidth="81.0" text="Ref. No." />
+                              <TableColumn prefWidth="89.0" text="\$/Item" />
+                              <TableColumn prefWidth="113.0" text="Ttl $" />
+                              <TableColumn prefWidth="89.0" />
+                              <TableColumn prefWidth="92.0" />
+                          </columns>
+                        </TableView>
+                        <JFXButton layoutX="699.0" layoutY="402.0" onAction="#exportIncomeExpensesTableAction" text="Export Table" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="415.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Materials">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="projectMaterialsTableView" layoutX="15.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="14.0">
+                           <columns>
+                              <TableColumn prefWidth="75.0" resizable="false" text="ID" visible="false" />
+                              <TableColumn prefWidth="157.0" text="Item" />
+                              <TableColumn prefWidth="84.0" text="Quantity" />
+                              <TableColumn prefWidth="252.0" text="Description" />
+                              <TableColumn prefWidth="108.0" text="\$/Item" />
+                              <TableColumn prefWidth="97.0" text="Ttl $" />
+                              <TableColumn />
+                              <TableColumn prefWidth="64.0" />
+                           </columns>
+                        </TableView>
+                        <JFXButton layoutX="699.0" layoutY="402.0" onAction="#exportProjectMaterialsTableAction" text="Export Table" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="415.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+         </tabs>
+      </JFXTabPane>
+   </children>
+</AnchorPane>

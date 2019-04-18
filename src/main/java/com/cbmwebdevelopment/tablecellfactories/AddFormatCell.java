@@ -21,7 +21,7 @@ public class AddFormatCell extends TableCell<InvoiceItems, Void>{
         addLink = new Hyperlink("Add");
         addLink.setTextFill(Color.BLACK);
         addLink.setOnAction(evt -> {
-            getTableView().getItems().add(new InvoiceItems(getTableView().getItems().size() + 1, "", "", 0.0,"", ""));
+            getTableView().getItems().add(new InvoiceItems(getTableView().getItems().size() + 1, "", "", 0.0,"0.00", "0.00"));
         });
     }
     

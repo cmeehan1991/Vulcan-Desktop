@@ -95,7 +95,7 @@ ProgressIndicator{
     -fx-background-color: transparent;
 }
 
-#AnchorPane{
+#AnchorPane, .AnchorPane{
     -fx-background-color:#ffffff;
 }
 
@@ -131,3 +131,22 @@ ProgressIndicator{
     -fx-font-size:12px;
 }
 
+/* Projects Table*/
+.projectsTable .column-header{
+    -fx-background-color: #ffffff;
+}
+
+.projectsTable{
+    -fx-border-color: #ffffff;
+}
+
+/* Title Pane */
+.title-pane--not-collapsible .title{
+    -fx-background-color:#ffffff;
+}
+
+.title-pane--not-collapsible *.content{
+    -fx-background-color:#ffffff;
+    -fx-border-color: #000000;
+    -fx-border-width: 2 1 1 1;
+}
