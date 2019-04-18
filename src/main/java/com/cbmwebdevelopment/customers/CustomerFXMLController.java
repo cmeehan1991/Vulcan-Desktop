@@ -6,6 +6,7 @@
 package com.cbmwebdevelopment.customers;
 
 import com.cbmwebdevelopment.customers.CustomerInvoicesTableController.CustomerInvoices;
+import com.cbmwebdevelopment.invoices.Invoice;
 import com.cbmwebdevelopment.notifications.Notifications;
 import com.cbmwebdevelopment.values.Values;
 import com.jfoenix.controls.JFXComboBox;
@@ -116,7 +117,9 @@ public class CustomerFXMLController implements Initializable {
             Customers customers = new Customers();
 
             Customer customer = customers.getCustomer(id);
-
+            Invoice invoice = new Invoice();
+            ObservableList<CustomerInvoices> customerInvoices = invoice.getCustomerInvoices(id);
+            
             Platform.runLater(() -> {
                 initInvoiceTable(id);
                 customerIdLabel.setText(id);
@@ -135,6 +138,7 @@ public class CustomerFXMLController implements Initializable {
                 phoneNumberTextField.setText(customer.getPhoneNumber());
                 individualTypeRadioButton.setSelected(customer.getIsIndividualType());
                 businessTypeRadioButton.setSelected(customer.getIsBusinessType());
+                invoiceTableTableView.getItems().setAll(customerInvoices);
             });
             executor.shutdown();
 

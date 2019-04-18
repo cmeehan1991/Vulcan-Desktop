@@ -80,67 +80,67 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <JFXTextField fx:id="companyNameTextField" labelFloat="true" prefHeight="27.0" prefWidth="541.0" promptText="Company Name" visible="false" GridPane.columnIndex="2" GridPane.columnSpan="2">
+                              <JFXTextField fx:id="companyNameTextField" labelFloat="true" maxHeight="27.0" prefHeight="27.0" prefWidth="541.0" promptText="Company Name" visible="false" GridPane.columnIndex="2">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </JFXTextField>
-                              <JFXComboBox fx:id="prefixComboBox" labelFloat="true" prefHeight="27.0" prefWidth="300.0" promptText="Prefix" GridPane.rowIndex="1">
+                              <JFXComboBox fx:id="prefixComboBox" labelFloat="true" maxHeight="27.0" prefHeight="27.0" prefWidth="300.0" promptText="Prefix" GridPane.rowIndex="1">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </JFXComboBox>
-                              <JFXTextField fx:id="firstNameTextField" labelFloat="true" prefHeight="37.0" prefWidth="300.0" promptText="First Name" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <JFXTextField fx:id="firstNameTextField" labelFloat="true" maxHeight="27.0" prefHeight="27.0" prefWidth="300.0" promptText="First Name" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </JFXTextField>
-                              <JFXTextField fx:id="lastNameTextField" labelFloat="true" prefHeight="37.0" prefWidth="300.0" promptText="Last Name" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                              <JFXTextField fx:id="lastNameTextField" labelFloat="true" maxHeight="27.0" prefHeight="27.0" prefWidth="300.0" promptText="Last Name" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </JFXTextField>
-                              <JFXComboBox fx:id="suffixComboBox" editable="true" labelFloat="true" prefHeight="27.0" prefWidth="87.0" promptText="Suffix" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                              <JFXComboBox fx:id="suffixComboBox" editable="true" labelFloat="true" maxHeight="27.0" prefHeight="27.0" prefWidth="87.0" promptText="Suffix" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </JFXComboBox>
-                              <JFXTextField fx:id="primaryAddressTextField" labelFloat="true" prefHeight="37.0" prefWidth="602.0" promptText="Street Address" GridPane.columnSpan="3" GridPane.rowIndex="2">
+                              <JFXTextField fx:id="primaryAddressTextField" labelFloat="true" maxHeight="27.0" prefHeight="27.0" prefWidth="602.0" promptText="Street Address" GridPane.columnSpan="3" GridPane.rowIndex="2">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </JFXTextField>
-                              <JFXTextField fx:id="secondaryAddressTextField" labelFloat="true" maxWidth="-Infinity" prefHeight="37.0" prefWidth="150.0" promptText="P.O Box, Apt, Ste" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                              <JFXTextField fx:id="secondaryAddressTextField" labelFloat="true" maxHeight="27.0" maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="P.O Box, Apt, Ste" GridPane.columnIndex="3" GridPane.rowIndex="2">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </JFXTextField>
-                              <JFXTextField fx:id="cityTextField" labelFloat="true" prefHeight="37.0" prefWidth="300.0" promptText="City" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                              <JFXTextField fx:id="cityTextField" labelFloat="true" maxHeight="27.0" prefHeight="27.0" prefWidth="300.0" promptText="City" GridPane.columnSpan="2" GridPane.rowIndex="3">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </JFXTextField>
-                              <JFXComboBox fx:id="stateComboBox" editable="true" labelFloat="true" prefHeight="37.0" prefWidth="300.0" promptText="State" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                              <JFXComboBox fx:id="stateComboBox" editable="true" labelFloat="true" maxHeight="27.0" prefHeight="27.0" prefWidth="300.0" promptText="State" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </JFXComboBox>
-                              <JFXTextField fx:id="postalCodeTextField" labelFloat="true" prefHeight="37.0" prefWidth="87.0" promptText="Postal Code" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                              <JFXTextField fx:id="postalCodeTextField" labelFloat="true" maxHeight="27.0" prefHeight="27.0" prefWidth="87.0" promptText="Postal Code" GridPane.columnSpan="2" GridPane.rowIndex="4">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </JFXTextField>
-                              <JFXComboBox fx:id="countryComboBox" editable="true" labelFloat="true" prefHeight="29.0" prefWidth="300.0" promptText="Country" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                              <JFXComboBox fx:id="countryComboBox" editable="true" labelFloat="true" maxHeight="27.0" prefHeight="27.0" prefWidth="300.0" promptText="Country" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </JFXComboBox>
-                              <JFXTextField fx:id="emailAddressTextField" labelFloat="true" prefHeight="37.0" prefWidth="278.0" promptText="Email Address" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                              <JFXTextField fx:id="emailAddressTextField" labelFloat="true" maxHeight="27.0" prefHeight="27.0" prefWidth="278.0" promptText="Email Address" GridPane.columnSpan="2" GridPane.rowIndex="5">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </JFXTextField>
-                              <JFXTextField fx:id="phoneNumberTextField" labelFloat="true" maxWidth="-Infinity" prefHeight="37.0" prefWidth="300.0" promptText="Phone Number" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                              <JFXTextField fx:id="phoneNumberTextField" labelFloat="true" maxHeight="27.0" maxWidth="-Infinity" prefHeight="27.0" prefWidth="300.0" promptText="Phone Number" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="5">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
@@ -153,22 +153,18 @@
             </Tab>
             <Tab text="Invoices">
               <content>
-                  <ScrollPane>
-                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="502.0" prefWidth="795.0">
-                           <children>
-                              <TableView fx:id="invoiceTableTableView" layoutX="65.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="15.0">
-                                <columns>
-                                  <TableColumn prefWidth="125.0" text="Invoice Number" />
-                                  <TableColumn prefWidth="200.0" text="Invoice Total" />
-                                    <TableColumn prefWidth="229.0" text="Amount Due" />
-                                    <TableColumn prefWidth="232.0" text="Status" />
-                                </columns>
-                              </TableView>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </ScrollPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="502.0" prefWidth="795.0">
+                     <children>
+                        <TableView fx:id="invoiceTableTableView" layoutX="65.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="15.0">
+                          <columns>
+                            <TableColumn prefWidth="125.0" text="Invoice Number" />
+                            <TableColumn prefWidth="200.0" text="Invoice Total" />
+                              <TableColumn prefWidth="229.0" text="Amount Due" />
+                              <TableColumn prefWidth="232.0" text="Status" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
               </content>
             </Tab>
          </tabs>
